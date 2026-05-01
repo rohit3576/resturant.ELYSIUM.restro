@@ -20,17 +20,24 @@ document.addEventListener('DOMContentLoaded', () => {
             if (progress === 100) {
                 clearInterval(loadInterval);
                 setTimeout(() => {
+                    // Use a combination of class and GSAP for a bulletproof exit
+                    loader.classList.add('fade-out');
                     gsap.to(loader, {
                         yPercent: -100,
                         duration: 1.2,
                         ease: "power4.inOut",
+                        delay: 0.2,
                         onComplete: () => {
                             body.style.overflow = '';
+                            loader.style.display = 'none'; // Ensure it's gone
                             if (typeof initScrollAnimations === 'function') {
                                 initScrollAnimations();
                             }
                         }
                     });
+
+                    // Fade in the hero content
+                    gsap.to('.hero', { opacity: 1, duration: 1, delay: 0.5 });
                 }, 500);
             }
         }, 150);
@@ -382,13 +389,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderMenu(category) {
         if (!menuContainer) return;
         
+        // Clear existing content (including skeletons)
         menuContainer.innerHTML = '';
         if (!menuData[category]) return;
         
         menuData[category].forEach(item => {
             menuContainer.insertAdjacentHTML('beforeend', `
                 <div class="dish-card" data-tilt style="opacity: 0; transform: translateY(20px);">
-                    <div class="dish-image"><img src="${item.image}" alt="${item.alt}" loading="lazy"></div>
+                    <div class="dish-image"><img src="${item.image}" alt="${item.alt}" loading="lazy" decoding="async"></div>
                     <div class="dish-info">
                         <div class="dish-header"><h3>${item.name}</h3><span class="price">${item.price}</span></div>
                         <p>${item.description}</p>

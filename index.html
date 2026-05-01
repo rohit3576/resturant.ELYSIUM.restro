@@ -5,16 +5,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Elysium | Culinary Artistry</title>
     
-    <!-- Premium Fonts -->
+    <!-- Performance Hints -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    
+    <!-- Preload Critical Assets -->
+    <link rel="preload" href="style.css" as="style">
+    <link rel="preload" href="main.js" as="script">
+
+    <!-- Premium Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" fetchpriority="high">
     
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Stylesheet -->
     <link rel="stylesheet" href="style.css">
+
+    <!-- Critical CSS -->
+    <style>
+        :root {
+            --bg-darker: #050505;
+            --text-main: #f5f5f5;
+            --accent-gold: #d4af37;
+            --font-heading: 'Cinzel', serif;
+            --font-body: 'Montserrat', sans-serif;
+        }
+        body, html {
+            margin: 0;
+            padding: 0;
+            background: var(--bg-darker);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+        }
+        .loader {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-darker);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .loader .logo-text {
+            font-family: var(--font-heading);
+            font-size: 3rem;
+            letter-spacing: 12px;
+            margin-bottom: 2rem;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; letter-spacing: 12px; }
+            50% { opacity: 1; letter-spacing: 16px; }
+        }
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            opacity: 0; /* Hidden until loader starts exit */
+        }
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 1.5rem 0;
+        }
+    </style>
+
+    <!-- No-JS Fallback -->
+    <noscript>
+        <style>
+            .loader { display: none !important; }
+            [data-scroll] { opacity: 1 !important; transform: none !important; }
+            .dish-card.skeleton { display: none !important; }
+        </style>
+    </noscript>
 </head>
 <body>
 
@@ -125,7 +195,7 @@
                         <!-- Glassmorphism card framing an image -->
                         <div class="glass-card image-card">
                             <div class="image-wrapper">
-                                <img src="https://images.pexels.com/photos/33479489/pexels-photo-33479489.jpeg" alt="Chef plating a dish" loading="lazy">
+                                <img src="https://images.pexels.com/photos/33479489/pexels-photo-33479489.jpeg" alt="Chef plating a dish" loading="lazy" width="800" height="1000" decoding="async">
                             </div>
                             <div class="card-caption">
                                 <h3>Chef Vance</h3>
@@ -153,8 +223,51 @@
 
                 <!-- Dynamic Menu Container -->
                 <div class="menu-showcase" id="menu-container" data-scroll>
-                    <!-- Cards are injected here by main.js via JSON -->
+                    <!-- Skeleton Loaders (visible before JS loads) -->
+                    <div class="dish-card skeleton">
+                        <div class="dish-image"></div>
+                        <div class="dish-info">
+                            <div class="dish-header"><div class="skeleton-text title"></div><div class="skeleton-text price"></div></div>
+                            <div class="skeleton-text line"></div>
+                            <div class="skeleton-text line"></div>
+                        </div>
+                    </div>
+                    <div class="dish-card skeleton">
+                        <div class="dish-image"></div>
+                        <div class="dish-info">
+                            <div class="dish-header"><div class="skeleton-text title"></div><div class="skeleton-text price"></div></div>
+                            <div class="skeleton-text line"></div>
+                            <div class="skeleton-text line"></div>
+                        </div>
+                    </div>
+                    <div class="dish-card skeleton">
+                        <div class="dish-image"></div>
+                        <div class="dish-info">
+                            <div class="dish-header"><div class="skeleton-text title"></div><div class="skeleton-text price"></div></div>
+                            <div class="skeleton-text line"></div>
+                            <div class="skeleton-text line"></div>
+                        </div>
+                    </div>
                 </div>
+
+                <noscript>
+                    <div class="menu-showcase">
+                        <div class="dish-card">
+                            <div class="dish-image"><img src="https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=600&q=80" alt="Scallops"></div>
+                            <div class="dish-info">
+                                <div class="dish-header"><h3>Diver Scallops</h3><span class="price">$38</span></div>
+                                <p>Cauliflower purée, brown butter caper sauce.</p>
+                            </div>
+                        </div>
+                        <div class="dish-card">
+                            <div class="dish-image"><img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" alt="Wagyu"></div>
+                            <div class="dish-info">
+                                <div class="dish-header"><h3>A5 Wagyu</h3><span class="price">$115</span></div>
+                                <p>Black garlic emulsion, charred maitake mushrooms.</p>
+                            </div>
+                        </div>
+                    </div>
+                </noscript>
             </div>
         </section>
 
@@ -175,7 +288,7 @@
                             </div>
                             <p class="review-text">"Elysium doesn't just push the boundaries of modern gastronomy; it shatters them entirely. Chef Vance has created a temple of culinary perfection."</p>
                             <div class="reviewer">
-                                <div class="reviewer-avatar"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="Sarah Johnson" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;"></div>
+                                <div class="reviewer-avatar"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="Sarah Johnson" width="50" height="50" loading="lazy"></div>
                                 <div class="reviewer-info">
                                     <h4>The New York Times</h4>
                                     <span>3 Stars</span>
@@ -189,7 +302,7 @@
                             </div>
                             <p class="review-text">"An ethereal dining experience. The A5 Wagyu is a revelation, and the zero-waste philosophy proves that luxury and sustainability can coexist."</p>
                             <div class="reviewer">
-                                <div class="reviewer-avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="Michael Chen" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;"></div>
+                                <div class="reviewer-avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="Michael Chen" width="50" height="50" loading="lazy"></div>
                                 <div class="reviewer-info">
                                     <h4>Michelin Guide</h4>
                                     <span>★★</span>
@@ -203,7 +316,7 @@
                             </div>
                             <p class="review-text">"A masterclass in flavor and presentation. Every plate that leaves the kitchen is a work of art that demands your full attention."</p>
                             <div class="reviewer">
-                                <div class="reviewer-avatar"><img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=100&q=80" alt="Emma Rodriguez" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;"></div>
+                                <div class="reviewer-avatar"><img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=100&q=80" alt="Emma Rodriguez" width="50" height="50" loading="lazy"></div>
                                 <div class="reviewer-info">
                                     <h4>James Beard Foundation</h4>
                                     <span>Excellence in Culinary Arts</span>
@@ -217,7 +330,7 @@
                             </div>
                             <p class="review-text">"The service is as impeccable as the food. The sommelier's pairings elevated an already perfect tasting menu into the stratosphere."</p>
                             <div class="reviewer">
-                                <div class="reviewer-avatar"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80" alt="David Park" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;"></div>
+                                <div class="reviewer-avatar"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80" alt="David Park" width="50" height="50" loading="lazy"></div>
                                 <div class="reviewer-info">
                                     <h4>Food & Wine</h4>
                                     <span>Best New Restaurant</span>
@@ -231,7 +344,7 @@
                             </div>
                             <p class="review-text">"A complete sensory immersion. The ambiance, the aromas, the textures—Elysium sets the new standard for fine dining in the city."</p>
                             <div class="reviewer">
-                                <div class="reviewer-avatar"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=100&q=80" alt="Jessica Lee" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;"></div>
+                                <div class="reviewer-avatar"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=100&q=80" alt="Jessica Lee" width="50" height="50" loading="lazy"></div>
                                 <div class="reviewer-info">
                                     <h4>Vogue</h4>
                                     <span>Culinary Editor</span>

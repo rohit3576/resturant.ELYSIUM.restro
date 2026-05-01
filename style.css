@@ -29,6 +29,7 @@
 html {
     scroll-behavior: initial;
     background-color: var(--bg-darker);
+    scrollbar-gutter: stable; /* Prevent layout shift on scrollbar toggle */
 }
 
 body {
@@ -100,6 +101,13 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    transition: opacity 0.8s ease, visibility 0.8s;
+}
+
+.loader.fade-out {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
 }
 
 .loader-content {
@@ -157,6 +165,7 @@ body {
     z-index: -2;
     pointer-events: none;
     opacity: 0.9;
+    background: var(--bg-darker); /* Fallback */
 }
 
 .noise-overlay {
@@ -185,6 +194,7 @@ h1, h2, h3, h4 {
 .section {
     padding: 8rem 0;
     position: relative;
+    min-height: 40vh; /* Prevent collapse */
 }
 
 .container {
@@ -687,6 +697,8 @@ h1, h2, h3, h4 {
     aspect-ratio: 1/1;
     overflow: hidden;
     margin-bottom: 1.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 4px;
 }
 
 .dish-image img {
@@ -726,6 +738,34 @@ h1, h2, h3, h4 {
     font-size: 0.85rem;
     color: var(--text-muted);
     line-height: 1.5;
+}
+
+.dish-card.skeleton {
+    pointer-events: none;
+}
+
+.dish-card.skeleton .dish-image {
+    background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+}
+
+.skeleton-text {
+    height: 1rem;
+    background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+    margin-bottom: 0.8rem;
+    border-radius: 2px;
+}
+
+.skeleton-text.title { width: 60%; height: 1.3rem; }
+.skeleton-text.price { width: 20%; height: 1.2rem; }
+.skeleton-text.line { width: 100%; }
+
+@keyframes skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
 }
 
 /* Reviews Carousel */
@@ -824,8 +864,11 @@ h1, h2, h3, h4 {
 }
 
 .reviewer-avatar img {
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     object-fit: cover;
+    background: rgba(255, 255, 255, 0.05); /* Placeholder background */
 }
 
 .reviewer-info h4 {
