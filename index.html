@@ -41,32 +41,18 @@
             font-family: var(--font-body);
             overflow-x: hidden;
         }
-        .loader {
-            position: fixed;
-            inset: 0;
-            background: var(--bg-darker);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
+        /* Smooth Page Fade-in */
+        .fade-in-content {
+            opacity: 0;
+            transition: opacity 1.2s ease-out;
         }
-        .loader .logo-text {
-            font-family: var(--font-heading);
-            font-size: 3rem;
-            letter-spacing: 12px;
-            margin-bottom: 2rem;
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 0.6; letter-spacing: 12px; }
-            50% { opacity: 1; letter-spacing: 16px; }
+        .fade-in-content.loaded {
+            opacity: 1;
         }
         .hero {
             min-height: 100vh;
             display: flex;
             align-items: center;
-            opacity: 0; /* Hidden until loader starts exit */
         }
         .header {
             position: fixed;
@@ -80,28 +66,17 @@
     <!-- No-JS Fallback -->
     <noscript>
         <style>
-            .loader { display: none !important; }
+            .fade-in-content { opacity: 1 !important; }
             [data-scroll] { opacity: 1 !important; transform: none !important; }
             .dish-card.skeleton { display: none !important; }
         </style>
     </noscript>
 </head>
-<body>
+<body class="fade-in-content">
 
     <!-- Custom Fluid Cursor -->
     <div class="cursor-dot" id="cursor-dot"></div>
     <div class="cursor-outline" id="cursor-outline"></div>
-
-    <!-- Loading Screen (Smooth entrance) -->
-    <div id="loader" class="loader">
-        <div class="loader-content">
-            <h1 class="logo-text">ELYSIUM</h1>
-            <div class="progress-bar">
-                <div class="progress" id="progress"></div>
-            </div>
-            <p class="loader-text">Preparing your experience...</p>
-        </div>
-    </div>
 
     <!-- 3D Canvas Background -->
     <canvas id="webgl-canvas"></canvas>

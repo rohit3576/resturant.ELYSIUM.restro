@@ -2,46 +2,26 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    // 1. Loader Logic
-    const loader = document.getElementById('loader');
-    const progressBar = document.getElementById('progress');
+    // 1. Page Initial Appearance
     const body = document.body;
     
-    if (loader && progressBar) {
-        body.style.overflow = 'hidden';
+    // Smooth entrance logic
+    const initPage = () => {
+        body.classList.add('loaded');
+        
+        // Initialize GSAP scroll animations
+        if (typeof initScrollAnimations === 'function') {
+            initScrollAnimations();
+        }
+        
+        // Final fade-in of critical elements
+        if (typeof gsap !== 'undefined') {
+            gsap.to('.hero', { opacity: 1, duration: 1, delay: 0.2 });
+        }
+    };
 
-        let progress = 0;
-        const loadInterval = setInterval(() => {
-            progress += Math.random() * 15;
-            if (progress > 100) progress = 100;
-            
-            progressBar.style.width = `${progress}%`;
-            
-            if (progress === 100) {
-                clearInterval(loadInterval);
-                setTimeout(() => {
-                    // Use a combination of class and GSAP for a bulletproof exit
-                    loader.classList.add('fade-out');
-                    gsap.to(loader, {
-                        yPercent: -100,
-                        duration: 1.2,
-                        ease: "power4.inOut",
-                        delay: 0.2,
-                        onComplete: () => {
-                            body.style.overflow = '';
-                            loader.style.display = 'none'; // Ensure it's gone
-                            if (typeof initScrollAnimations === 'function') {
-                                initScrollAnimations();
-                            }
-                        }
-                    });
-
-                    // Fade in the hero content
-                    gsap.to('.hero', { opacity: 1, duration: 1, delay: 0.5 });
-                }, 500);
-            }
-        }, 150);
-    }
+    // Run initialization on window load for production stability
+    window.addEventListener('load', initPage);
 
     // 2. Lenis Smooth Scrolling
     let lenis;
